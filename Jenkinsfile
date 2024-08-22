@@ -5,7 +5,7 @@ pipeline {
             steps {
                 git branch: 'main',
                     credentialsId: 'Git_Credentials',
-                    url: 'https://github.com/Hariveerj/serverlepestha.git'
+                    url: 'https://github.com/Hariveerj/Hari_frontend.git'
             }
         }
         stage('build the docker image') {
