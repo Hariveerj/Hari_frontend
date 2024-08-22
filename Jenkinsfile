@@ -3,9 +3,7 @@ pipeline {
     stages {
         stage('Clone Code') {
             steps {
-                git branch: 'main',
-                    credentialsId: 'Git_Credentials',
-                    url: 'https://github.com/Hariveerj/Hari_frontend.git'
+                git branch: 'main', credentialsId: 'Git_Credentials', url: 'https://github.com/Hariveerj/Hari_frontend.git'
             }
         }
         stage('build the docker image') {
