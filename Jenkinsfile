@@ -1,26 +1,57 @@
 pipeline {
-    agent { label "project_node_1"}
+    agent { label "project_node_1" }
     stages {
         stage('Clone Code') {
             steps {
-                git branch: 'main', credentialsId: 'Git_Credentials', url: 'https://github.com/Hariveerj/Hari_frontend.git'
+                script {
+                    echo "Cloning repository..."
+                    git branch: 'main', credentialsId: 'Git_Credentials', url: 'https://github.com/Hariveerj/Hari_frontend.git'
+                }
             }
         }
-        stage('build the docker image') {
+        stage('Build the Docker Image') {
             steps {
                 script {
-                    echo "building the docker image..."
-                    sh 'docker-compose build'
+                    try {
+                        echo "Building the Docker image..."
+                        sh 'docker-compose build'
+                    } catch (Exception e) {
+                        echo "Failed to build the Docker image"
+                        error "Build stage failed."
+                    }
                 }
             }
         }
         stage('Deploy') {
             steps {
                 script {
-                    echo "starting container..."
-                    sh 'docker-compose up -d'
+                    try {
+                        echo "Starting Docker containers..."
+                        sh 'docker-compose up -d'
+                    } catch (Exception e) {
+                        echo "Failed to start Docker containers"
+                        error "Deploy stage failed."
+                    }
                 }
             }
+        }
+    }
+    post {
+        always {
+            script {
+                try {
+                    echo "Cleaning up Docker containers..."
+                    sh 'docker-compose down || true'
+                } catch (Exception e) {
+                    echo "Cleanup failed, but the pipeline will proceed."
+                }
+            }
+        }
+        success {
+            echo "Pipeline completed successfully."
+        }
+        failure {
+            echo "Pipeline failed."
         }
     }
 }
