@@ -1,11 +1,11 @@
 pipeline {
     agent any
     stages {
-        stage('Build Docker') {
+        stage('Debug Env') {
             steps {
-                sh 'echo "FROM alpine" > Dockerfile'
-                sh 'docker build -t test-alpine .'
+                sh 'printenv'
             }
         }
+        // Continue with your stages
     }
 }
