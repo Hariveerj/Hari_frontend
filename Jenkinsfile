@@ -17,7 +17,7 @@ pipeline {
 
                     // Allow specific commit message "repu ra"
                     if (commitMessages != "pawankalyan" && !commitMessages.matches(".*(JIRA-[0-9]+).*")) {
-                        error "Commit message does not follow the required format. Please include a valid JIRA ticket (e.g., JIRA-123)."
+                        error "Orei, poram boku sarei na comment pettu"
                     }
                 }
             }
