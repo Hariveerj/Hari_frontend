@@ -10,7 +10,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo "building the docker image..."
-                dir('/var/lib/jenkins/workspace/pipeline') {
+                dir('/project1/workspace/pipeline') {
                     sh 'sudo docker-compose up -d'
                 }
             }
