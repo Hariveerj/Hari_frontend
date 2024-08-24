@@ -6,6 +6,5 @@ COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
 ####  COPY THE CODE TO THE WORKING DIRECTORY  ####
 COPY html /usr/share/nginx/html
-
 ####  EXPOSE FROM THE PORT 90  ####
 EXPOSE 90
