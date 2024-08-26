@@ -38,7 +38,7 @@ pipeline {
             steps {
                 script {
                     def response = sh(
-                        script: 'curl -o /dev/null -s -w http://13.51.161.45:90/',
+                        script: 'curl -o /dev/null -s -w "%{http}"http://13.51.161.45:90/',
                         returnStdout: true
                     ).trim()
 
