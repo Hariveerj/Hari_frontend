@@ -5,7 +5,6 @@ pipeline {
         stage('Git') {
             steps {
                 git branch: 'main',
-                    credentialsId: 'githubtoken',
                     url: 'https://github.com/Hariveerj/Hari_frontend.git'
             }
         }
