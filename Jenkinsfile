@@ -9,7 +9,6 @@ pipeline {
                     url: 'https://github.com/Hariveerj/Hari_frontend.git'
             }
         }
-
         stage('Validate Commit Messages') {
             steps {
                 script {
