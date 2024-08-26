@@ -1,13 +1,6 @@
 pipeline {
     agent { label 'server' }
-
     stages {
-        stage('Git') {
-            steps {
-                git branch: 'main',
-                    url: 'https://github.com/Hariveerj/Hari_frontend.git'
-            }
-        }
         stage('Validate Commit Messages') {
             steps {
                 script {
