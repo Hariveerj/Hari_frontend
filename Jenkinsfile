@@ -53,22 +53,27 @@ pipeline {
             when {
                 expression {
                     def response = sh(
-                        script: 'curl http://13.51.161.45:90/',
+                        script: 'curl -s -o /dev/null -w "%{http_code}" http://13.51.161.45:90/',
                         returnStdout: true
                     ).trim()
-                    return response // Merge only if the response is valid
+                    return response == '200'
                 }
             }
             steps {
                 script {
-                    // Clone the repository to work with it
-                    git branch: 'test',
-                        credentialsId: 'Credentials',
-                        url: 'https://github.com/Hariveerj/Hari_frontend.git'
-                    sh 'git checkout test'
-                    sh 'git merge origin/main'
-                    sh 'git push origin test'
-                    echo "code merged sucessfully"
+                    // Configure Git credentials
+                    withCredentials([usernamePassword(credentialsId: 'Credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                        sh 'git config --global user.name "Hariveerj"'
+                        sh 'git config --global user.email "hariveerj@gmail.com"'
+                        sh 'git clone https://github.com/Hariveerj/Hari_frontend.git'
+                    dir('Hari_frontend') {
+                        sh 'git checkout test'
+                        sh 'git pull origin test'
+                        sh 'git merge origin/main'
+                        sh 'git push origin test'
+                    }
+                    }    
+                echo "Code merged successfully"
                 }
             }
         }
