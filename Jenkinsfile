@@ -49,31 +49,5 @@ pipeline {
                 }
             }
         }
-        stage('Merge to Test') {
-            when {
-                expression {
-                    def response = sh(
-                        script: 'curl -s -o /dev/null -w "%{http_code}" http://13.51.161.45:90/',
-                        returnStdout: true
-                    ).trim()
-                    return response == '200'
-                }
-            }
-            steps {
-                script {
-                    // Configure Git credentials
-                    sh 'git config --global user.name "Hariveerj"'
-                    sh 'git config --global user.email "hariveerj@gmail.com"'
-                    sh 'git clone https://github.com/Hariveerj/Hari_frontend.git'
-                dir('Hari_frontend') {
-                    sh 'git checkout test'
-                    sh 'git pull origin test'
-                    sh 'git merge origin/main'
-                    sh 'git push origin test'
-                }
-                }    
-                echo "Code merged successfully"
-            }
-        }
     }
 }
