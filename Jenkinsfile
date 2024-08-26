@@ -19,7 +19,7 @@ pipeline {
                     ).trim()
 
                     if (!commitMessage.equals("pawankalyan") && !commitMessage.contains("JIRA-")) {
-                        error "ఒరేయ్, పోరం బోకు సారీ అయిన కామెంట్"
+                        error "ఒరేయ్, పోరం బోకు సరిగ్గా కామెంట్ పెట్టు"
                     }
                 }
             }
@@ -33,7 +33,7 @@ pipeline {
             }
         }
         // Adding curl check without changing the above script
-        stage('Check Website Availability') {
+        stage('check the website is visible or not') {
             steps {
                 script {
                     def response = sh(
