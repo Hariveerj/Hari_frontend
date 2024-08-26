@@ -62,9 +62,14 @@ pipeline {
             }
             steps {
                 script {
+                    // Clone the repository to work with it
+                    git branch: 'test',
+                        credentialsId: 'Credentials',
+                        url: 'https://github.com/Hariveerj/Hari_frontend.git'
                     sh 'git checkout test'
                     sh 'git merge origin/main'
                     sh 'git push origin test'
+                    echo "code merged sucessfully"
                 }
             }
         }
