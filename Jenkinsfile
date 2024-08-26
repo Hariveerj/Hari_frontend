@@ -32,7 +32,6 @@ pipeline {
                 }
             }
         }
-
         // Adding curl check without changing the above script
         stage('Check Website Availability') {
             steps {
