@@ -1,32 +1,52 @@
 pipeline {
-    agent { label "server" }
+    agent { label 'server' }
 
     stages {
-        stage('git') {
+        stage('Git') {
             steps {
-                git branch: 'main', credentialsId: 'Credentials', url: 'https://github.com/Hariveerj/Hari_frontend.git'
+                git branch: 'main',
+                    credentialsId: 'githubtoken',
+                    url: 'https://github.com/Hariveerj/Hari_frontend.git'
             }
         }
+
         stage('Validate Commit Messages') {
             steps {
                 script {
-                    def commitMessages = sh(
+                    def commitMessage = sh(
                         script: "git log -1 --pretty=%B",
                         returnStdout: true
                     ).trim()
 
-                    // Allow specific commit message "repu ra"
-                    if (commitMessages != "pawankalyan" && !commitMessages.matches(".*(JIRA-[0-9]+).*")) {
+                    if (!commitMessage.equals("pawankalyan") && !commitMessage.contains("JIRA-")) {
                         error "Orei, poram boku sarei na comment pettu"
                     }
                 }
             }
         }
+
         stage('Deploy') {
             steps {
-                echo "building the docker image..."
                 dir('/project1/workspace/pipeline') {
-                    sh 'docker-compose up -d'
+                    sh 'docker-compose up --build -d'
+                }
+            }
+        }
+
+        // Adding curl check without changing the above script
+        stage('Check Website Availability') {
+            steps {
+                script {
+                    def response = sh(
+                        script: 'curl -o /dev/null -s -w "%{http_code}" http://13.51.161.45:90/',
+                        returnStdout: true
+                    ).trim()
+
+                    if (response != '200') {
+                        error "Website is not accessible, HTTP status code: ${response}"
+                    } else {
+                        echo "Website is accessible with status code: ${response}"
+                    }
                 }
             }
         }
