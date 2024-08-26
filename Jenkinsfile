@@ -50,5 +50,23 @@ pipeline {
                 }
             }
         }
+        stage('Merge to Test') {
+            when {
+                expression {
+                    def response = sh(
+                        script: 'curl http://13.51.161.45:90/',
+                        returnStdout: true
+                    ).trim()
+                    return response // Merge only if the response is valid
+                }
+            }
+            steps {
+                script {
+                    sh 'git checkout test'
+                    sh 'git merge origin/main'
+                    sh 'git push origin test'
+                }
+            }
+        }
     }
 }
