@@ -62,20 +62,19 @@ pipeline {
             steps {
                 script {
                     // Configure Git credentials
-                    withCredentials([usernamePassword(credentialsId: 'Credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                        sh 'git config --global user.name "Hariveerj"'
-                        sh 'git config --global user.email "hariveerj@gmail.com"'
-                        sh 'git clone https://github.com/Hariveerj/Hari_frontend.git'
-                    dir('Hari_frontend') {
-                        sh 'git checkout test'
-                        sh 'git pull origin test'
-                        sh 'git merge origin/main'
-                        sh 'git push origin test'
-                    }
-                    }    
-                echo "Code merged successfully"
+                    sh 'git config --global user.name "Hariveerj"'
+                    sh 'git config --global user.email "hariveerj@gmail.com"'
+                    sh 'git clone https://github.com/Hariveerj/Hari_frontend.git'
+                dir('Hari_frontend') {
+                    sh 'git checkout test'
+                    sh 'git pull origin test'
+                    sh 'git merge origin/main'
+                    sh 'git push origin test'
                 }
+                }    
+                echo "Code merged successfully"
             }
         }
+    }
     }
 }
