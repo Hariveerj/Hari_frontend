@@ -19,7 +19,7 @@ pipeline {
                     ).trim()
 
                     if (!commitMessage.equals("pawankalyan") && !commitMessage.contains("JIRA-")) {
-                        error "ఒరేయ్, పోరం బోకు సరే నా కామెంట్ పెట్టు"
+                        error "ఒరేయ్, పోరం బోకు సారీ అయిన కామెంట్"
                     }
                 }
             }
