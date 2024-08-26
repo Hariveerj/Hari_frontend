@@ -42,9 +42,9 @@ pipeline {
                     ).trim()
 
                     if (response != '200') {
-                        error "Website is not accessible, HTTP status code: ${response}"
+                        error "నీ పొల్లంలో మొల్లకల్లు రాలేదు పో, HTTP status code: ${response}"
                     } else {
-                        echo "Website is accessible with status code: ${response}"
+                        echo "నీ పొల్లంలో మొల్లకాలు వచ్చేయ్ రోయీ code: ${response}"
                     }
                 }
             }
