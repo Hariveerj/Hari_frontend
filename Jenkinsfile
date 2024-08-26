@@ -26,7 +26,7 @@ pipeline {
             steps {
                 echo "building the docker image..."
                 dir('/project1/workspace/pipeline') {
-                    sh 'sudo docker-compose up -d'
+                    sh 'docker-compose up -d'
                 }
             }
         }
