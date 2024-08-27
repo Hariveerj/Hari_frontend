@@ -18,7 +18,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                dir('/project1/workspace/pipeline') {
+                dir('/maheshbabu/workspace/devops_main/') {
                     sh 'docker-compose up --build -d'
                 }
             }
@@ -28,7 +28,7 @@ pipeline {
             steps {
                 script {
                     def response = sh(
-                        script: 'curl -o /dev/null -s -w "%{http_code}" http://13.51.161.45:90/',
+                        script: 'curl -o /dev/null -s -w "%{http_code}" http://16.170.159.34:90/',
                         returnStdout: true
                     ).trim()
 
