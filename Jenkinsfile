@@ -1,6 +1,6 @@
 pipeline {
 	agent {
-		label "$(env.BRANCH_NAME == 'prod' ? 'maheshbabu' : env.BRANCH_NAME == 'stage' ? '')"
+		label $(env.BRANCH_NAME == 'prod' ? 'maheshbabu' : env.BRANCH_NAME == 'stage' ? 'powerstar')
 	}
 	stages {
 		stage('Deploy') {
@@ -10,7 +10,6 @@ pipeline {
 					script: "git log -1 --pretty=%B",
 					returnStdout: true
 				).trim()
-				
 				steps {
 					dir(env.BRANCH_NAME == 'prod' ? '/maheshbabu/workspace/devops_main' : '/powerstar/workspace/devops_main') {
 						sh 'docker-compose up --build -d'
