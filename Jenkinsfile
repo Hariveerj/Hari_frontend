@@ -11,7 +11,7 @@ pipeline {
                         returnStdout: true
                     ).trim()
                 }
-                dir(env.BRANCH_NAME == 'prod' ? '/maheshbabu/workspace/devops_main' : '/powerstar/workspace/devops_main') {
+                dir(env.BRANCH_NAME == 'prod' ? '/maheshbabu/workspace/devops_prod/' : '/powerstar/workspace/devops_stage') {
                     sh 'docker-compose up --build -d'
                 }
             }
