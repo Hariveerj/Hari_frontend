@@ -1,43 +1,44 @@
 pipeline {
-    agent { label 'maheshbabu' }
-    stages {
-        stage('Validate Commit Messages') {
-            steps {
-                script {
-                    def commitMessage = sh(
-                        script: "git log -1 --pretty=%B",
-                        returnStdout: true
-                    ).trim()
-                    if (!commitMessage.equals("pawankalyan") && !commitMessage.contains("JIRA-")) {
-                        error "ఒరేయ్, పోరం బోకు సరిగ్గా కామెంట్ పెట్టు"
-                    }
-                }
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                dir('/maheshbabu/workspace/devops_main/') {
-                    sh 'docker-compose up --build -d'
-                }
-            }
-        }
-        // Adding curl check without changing the above script
-        stage('check the website is visible or not') {
-            steps {
-                script {
-                    def response = sh(
-                        script: 'curl -o /dev/null -s -w "%{http_code}" http://16.170.159.34:90/',
-                        returnStdout: true
-                    ).trim()
-
-                    if (response != '200') {
-                        error "నీ పొల్లంలో మొల్లకల్లు రాలేదు పో, HTTP status code: ${response}"
-                    } else {
-                        echo "నీ పొల్లంలో మొల్లకాలు వచ్చేయ్ రోయీ code: ${response}"
-                    }
-                }
-            }
-        }
-    }
+	agent {
+		label "$(env.BRANCH_NAME == 'prod' ? 'maheshbabu' : env.BRANCH_NAME == 'stage' ? '')"
+	}
+	stages {
+		stage('Deploy') {
+			
+			steps {
+				def commitMessage = sh(
+					script: "git log -1 --pretty=%B",
+					returnStdout: true
+				).trim()
+				
+				steps {
+					dir(env.BRANCH_NAME == 'prod' ? '/maheshbabu/workspace/devops_main' : '/powerstar/workspace/devops_main') {
+						sh 'docker-compose up --build -d'
+					}
+				}	
+			}
+		}
+		stage('Check Website Availability') {
+			steps {
+				def url = ''
+				
+				if (env.BRANCH_NAME == 'prod') {
+					url = 'http://13.50.5.108:90/'
+				} else if (env.BRANCH_NAME == 'stage') {
+					url = 'http://16.170.159.34:90/'
+				}
+                
+				def response = sh(
+					script: "curl -o /dev/null -s -w \"%{http_code}"${url}",
+					returnStdout: true
+				).trim()
+				
+				if (reponse != '200') {
+					error "ఎపుడు పోదు పోదుకోవడం తప్పు కాని ఉపయోగం లేదు నీవల్ల లేచి పని చేయి రా రేయ్ ${env.BRANCH_NAME}. HTTP status code: ${response}"
+				} else {
+					echo "ఎం చేష్టవ్ లేయ్ పోదుకో"
+				}
+			}
+		}
+	}
 }
