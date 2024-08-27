@@ -5,12 +5,6 @@ pipeline {
     stages {
         stage('Deploy') {
             steps {
-                script {
-                    def commitMessage = sh(
-                        script: "git log -1 --pretty=%B",
-                        returnStdout: true
-                    ).trim()
-                }
                 dir(env.BRANCH_NAME == 'prod' ? '/maheshbabu/workspace/devops_prod/' : '/powerstar/workspace/devops_stage') {
                     sh 'docker-compose up --build -d'
                 }
