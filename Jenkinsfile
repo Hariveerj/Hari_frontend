@@ -8,7 +8,6 @@ pipeline {
                         script: "git log -1 --pretty=%B",
                         returnStdout: true
                     ).trim()
-
                     if (!commitMessage.equals("pawankalyan") && !commitMessage.contains("JIRA-")) {
                         error "ఒరేయ్, పోరం బోకు సరిగ్గా కామెంట్ పెట్టు"
                     }
