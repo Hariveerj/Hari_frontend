@@ -1,44 +1,44 @@
 pipeline {
-    agent { label 'server' }
-    stages {
-        stage('Validate Commit Messages') {
-            steps {
-                script {
-                    def commitMessage = sh(
-                        script: "git log -1 --pretty=%B",
-                        returnStdout: true
-                    ).trim()
-
-                    if (!commitMessage.equals("pawankalyan") && !commitMessage.contains("JIRA-")) {
-                        error "ఒరేయ్, పోరం బోకు సరిగ్గా కామెంట్ పెట్టు"
-                    }
-                }
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                dir('/project1/workspace/pipeline') {
-                    sh 'docker-compose up --build -d'
-                }
-            }
-        }
-        // Adding curl check without changing the above script
-        stage('check the website is visible or not') {
-            steps {
-                script {
-                    def response = sh(
-                        script: 'curl -o /dev/null -s -w "%{http_code}" http://13.51.161.45:90/',
-                        returnStdout: true
-                    ).trim()
-
-                    if (response != '200') {
-                        error "నీ పొల్లంలో మొల్లకల్లు రాలేదు పో, HTTP status code: ${response}"
-                    } else {
-                        echo "నీ పొల్లంలో మొల్లకాలు వచ్చేయ్ రోయీ code: ${response}"
-                    }
-                }
-            }
-        }
-    }
+	agent {
+		label "$(env.BRANCH_NAME == 'prod' ? 'slave-1' : env.BRANCH_NAME == 'stage' ? 'slave-2')"
+	}
+	stages {
+		stage('Deploy') {
+			
+			steps {
+				def commitMessage = sh(
+					script: "git log -1 --pretty=%B",
+					returnStdout: true
+				).trim()
+				
+				steps {
+					dir('/project1/workspace/pipeline') {
+						sh 'docker-compose up --build -d'
+					}
+				}	
+			}
+		}
+		stage('Check Website Availability') {
+			steps {
+				def url = ''
+				
+				if (env.BRANCH_NAME == 'prod') {
+					url = ''
+				} else if (env.BRANCH_NAME == 'stage') {
+					url = ''
+				}
+				
+				def response = sh(
+					script: "curl -o /dev/null -s -w \"%{http_code}"${url}",
+					returnStdout: true
+				).trim()
+				
+				if (reponse != '200') {
+					error "ఎపుడు పోదు పోదుకోవడం తప్పు కాని ఉపయోగం లేదు నీవల్ల లేచి పని చేయి రా రేయ్ ${env.BRANCH_NAME}. HTTP status code: ${response}"
+				} else {
+					echo "ఎం చేష్టవ్ లేయ్ పోదుకో"
+				}
+			}
+		}
+	}
 }
