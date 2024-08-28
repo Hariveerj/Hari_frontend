@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label env.BRANCH_NAME == 'prod' ? 'maheshbabu' : env.BRANCH_NAME == 'stage' ? 'powerstar' : ''
+        label $(env.BRANCH_NAME == 'prod' ? 'maheshbabu' : env.BRANCH_NAME == 'stage' ? 'powerstar')
     }
     stages {
         stage('Deploy') {
